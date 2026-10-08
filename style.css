@@ -1,140 +1,190 @@
-/* Общие стили и сброс отступов */
+/* Полный сброс и современная база */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 body {
-    background-color: #0b0c10;
-    color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding-bottom: 50px;
+    background-color: #08090d;
+    color: #f1f2f4;
+    overflow-x: hidden;
 }
 
-/* Шапка сайта */
+/* Прокачанная шапка сайта */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
-    background-color: #12141c;
-    border-bottom: 1px solid #1f2330;
+    padding: 18px 5%;
+    background: rgba(14, 17, 26, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1a1e2d;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo {
-    font-weight: 800;
-    font-size: 22px;
-    color: #45f3ff;
-    letter-spacing: 1px;
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+}
+
+.logo span {
+    color: #00f2fe;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
 }
 
 nav {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 15px;
 }
 
-nav a {
-    color: #aaaaaa;
-    text-decoration: none;
+/* Кнопки навигации (Гайд, Тренеры, Списки) */
+.nav-link {
+    background: none;
+    border: none;
+    color: #8f94a6;
     font-size: 14px;
-    transition: color 0.2s;
+    font-weight: 600;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-nav a:hover {
-    color: #45f3ff;
+.nav-link:hover, .nav-link.active {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+    box-shadow: inset 0 -2px 0 #00f2fe;
+    border-radius: 6px 6px 0 0;
 }
 
 .btn-admin {
-    background-color: transparent;
-    color: #45f3ff;
-    border: 1px solid #45f3ff;
+    background: transparent;
+    color: #00f2fe;
+    border: 1px solid rgba(0, 242, 254, 0.4);
     padding: 8px 18px;
     border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
+    font-weight: 700;
     font-size: 13px;
-    transition: all 0.2s;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .btn-admin:hover {
-    background-color: #45f3ff;
-    color: #0b0c10;
+    background: #00f2fe;
+    color: #08090d;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+    transform: translateY(-1px);
 }
 
-/* Главный блок текста */
+/* Переключаемые страницы сайта */
+.page-section {
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.page-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Главный блок презентации */
 .hero {
     text-align: center;
-    padding: 60px 20px 40px 20px;
+    padding: 50px 20px 30px 20px;
 }
 
 .hero h1 {
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 38px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 40%, #00f2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: 12px;
 }
 
 .hero p {
     color: #8f94a6;
-    font-size: 15px;
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-/* Контейнер вкладок */
+/* Новая плавная сетка горизонтального выбора вкладок */
 .tabs-container {
     display: flex;
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 25px;
+    gap: 8px;
+    margin: 20px auto 35px auto;
+    background: #0e111a;
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid #1a1e2d;
+    max-width: fit-content;
+    overflow-x: auto;
 }
 
 .tab-btn {
-    background-color: #12141c;
-    border: 1px solid #1f2330;
-    color: #8f94a6;
-    padding: 10px 24px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 6px;
+    background: transparent;
+    border: none;
+    color: #7b8194;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
+    white-space: nowrap;
 }
 
 .tab-btn:hover {
     color: #ffffff;
-    border-color: #3b4257;
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .tab-btn.active {
-    color: #45f3ff;
-    background-color: #161924;
-    border-color: #45f3ff;
+    color: #08090d;
+    background: #00f2fe;
+    box-shadow: 0 4px 12px rgba(0, 242, 254, 0.3);
 }
 
-/* Отображение контента вкладок */
+/* Оболочка контента */
 .tab-content {
-    display: none; /* Скрывает все вкладки по умолчанию */
-    max-width: 900px;
+    display: none;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 25px;
-    background-color: #12141c;
-    border-radius: 10px;
-    border: 1px solid #1f2330;
+    padding: 0 20px;
 }
 
 .tab-content.active {
-    display: block; /* Показывает только активную */
+    display: block;
 }
 
 .tab-content h2 {
-    font-size: 20px;
+    font-size: 22px;
     margin-bottom: 20px;
-    color: #ffffff;
+    font-weight: 700;
 }
 
-/* Таблицы */
+/* Киберспортивные таблицы */
 .table-scroll {
-    overflow-x: auto;
+    background: #0e111a;
+    border-radius: 12px;
+    border: 1px solid #1a1e2d;
+    overflow: hidden;
 }
 
 table {
@@ -144,121 +194,158 @@ table {
 }
 
 th {
-    color: #8f94a6;
-    font-size: 13px;
-    font-weight: 600;
+    color: #656c80;
+    font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
-    padding: 12px 16px;
-    border-bottom: 2px solid #1f2330;
+    letter-spacing: 0.5px;
+    padding: 16px 24px;
+    background: #121622;
+    border-bottom: 1px solid #1a1e2d;
 }
 
 td {
-    padding: 14px 16px;
+    padding: 16px 24px;
     font-size: 15px;
-    border-bottom: 1px solid #1f2330;
-    color: #e1e3e8;
+    border-bottom: 1px solid #141824;
+    color: #d1d4dc;
+    transition: background 0.2s ease;
 }
 
+/* Крутая плавная подсветка строки при наведении */
 tr:hover td {
-    background-color: #161924;
+    background: rgba(0, 242, 254, 0.03);
+    color: #ffffff;
 }
 
 .player-name {
-    font-weight: 600;
+    font-weight: 700;
     color: #ffffff;
 }
 
-/* Стиль плашек тиров */
+/* Неоновые индикаторы PvP Тиров */
 .tier {
     display: inline-block;
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 4px 10px;
+    border-radius: 6px;
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     margin-right: 6px;
-    letter-spacing: 0.5px;
 }
 
-.tier.ht { background-color: #ff4757; color: #ffffff; }
-.tier.lt { background-color: #ffa502; color: #0b0c10; }
+.tier.ht { background: rgba(255, 71, 87, 0.15); color: #ff4757; border: 1px solid rgba(255, 71, 87, 0.3); }
+.tier.lt { background: rgba(255, 165, 2, 0.15); color: #ffa502; border: 1px solid rgba(255, 165, 2, 0.3); }
+
+/* Контейнеры для страниц Контента (Гайды / Тренеры) */
+.section-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.section-container h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Анимированные карточки тренеров и инфы */
+.info-card, .coach-card {
+    background: #0e111a;
+    border: 1px solid #1a1e2d;
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.info-card:hover, .coach-card:hover {
+    transform: translateY(-5px);
+    border-color: #00f2fe;
+    box-shadow: 0 10px 25px rgba(0, 242, 254, 0.1);
+}
+
+.info-card h3 { margin-bottom: 15px; color: #00f2fe; }
+.info-card ul { padding-left: 20px; margin-top: 15px; }
+.info-card li { margin-bottom: 10px; }
+
+.coach-card { text-align: center; }
+.avatar-placeholder {
+    width: 70px;
+    height: 70px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 15px auto;
+    border: 1px solid #22273a;
+}
+.coach-card h3 { margin-bottom: 5px; }
+.coach-card .role { color: #8f94a6; font-size: 13px; margin-bottom: 15px; }
+.tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.05);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 2px;
+}
 
 /* Панель администратора */
 .admin-panel {
-    max-width: 900px;
-    margin: 0 auto 30px auto;
+    max-width: 1000px;
+    margin: 20px auto 30px auto;
     padding: 25px;
-    background-color: #161924;
-    border: 2px dashed #45f3ff;
-    border-radius: 10px;
+    background: #111420;
+    border: 2px dashed #00f2fe;
+    border-radius: 12px;
 }
 
-.admin-panel h3 {
-    margin-bottom: 15px;
-    font-size: 18px;
-    color: #45f3ff;
-}
-
-#addPlayerForm {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
+.admin-panel h3 { margin-bottom: 15px; color: #00f2fe; }
+#addPlayerForm { display: flex; flex-wrap: wrap; gap: 12px; }
 #addPlayerForm input, #addPlayerForm select {
-    background-color: #0b0c10;
-    border: 1px solid #2d3245;
-    color: #ffffff;
-    padding: 10px 14px;
-    border-radius: 6px;
+    background: #08090d;
+    border: 1px solid #22273a;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
     font-size: 14px;
     flex: 1;
-    min-width: 140px;
+    min-width: 150px;
 }
-
 #addPlayerForm input:focus, #addPlayerForm select:focus {
     outline: none;
-    border-color: #45f3ff;
+    border-color: #00f2fe;
 }
-
 .btn-submit {
-    background-color: #45f3ff;
-    color: #0b0c10;
+    background: #00f2fe;
+    color: #08090d;
     border: none;
-    font-weight: 700;
-    padding: 10px 24px;
-    border-radius: 6px;
+    font-weight: 800;
+    padding: 12px 24px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
+    transition: background 0.2s;
 }
-
-.btn-submit:hover {
-    background-color: #37cfdb;
-}
-
-.btn-logout {
-    background: none;
-    border: none;
-    color: #ff4757;
-    margin-top: 15px;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 13px;
-}
-
+.btn-submit:hover { background: #33f5ff; }
+.btn-logout { background: none; border: none; color: #ff4757; margin-top: 15px; cursor: pointer; text-decoration: underline; font-size: 13px; }
 .btn-delete {
-    background-color: rgba(255, 71, 87, 0.1);
+    background: rgba(255, 71, 87, 0.1);
     color: #ff4757;
     border: 1px solid #ff4757;
-    padding: 4px 10px;
-    border-radius: 4px;
+    padding: 5px 12px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 12px;
     font-weight: 600;
+    font-size: 12px;
     transition: all 0.2s;
 }
-
-.btn-delete:hover {
-    background-color: #ff4757;
-    color: #ffffff;
-}
+.btn-delete:hover { background: #ff4757; color: #fff; }
