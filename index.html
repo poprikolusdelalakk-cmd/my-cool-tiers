@@ -3,107 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CraftTiers — Тир-лист игроков</title>
+    <title>CraftTiers — Киберспортивный Minecraft Тир-Лист</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <div class="logo">CRAFTTIERS</div>
+        <div class="logo">CRAFT<span>TIERS</span></div>
         <nav>
-            <a href="#">Гайд</a>
-            <a href="#">Тренеры</a>
+            <button class="nav-link active" data-target="main-tierlist">Тир-листы</button>
+            <button class="nav-link" data-target="guide-page">Гайд</button>
+            <button class="nav-link" data-target="coaches-page">Тренеры</button>
             <button class="btn-admin" id="adminAuthBtn">Вход для Создателя</button>
         </nav>
     </header>
 
     <main>
-        <section class="hero">
-            <h1>Крупнейший тир-лист игроков Minecraft</h1>
-            <p>Выбирайте режим, смотрите статистику и оценивайте лучших игроков.</p>
-        </section>
+        <!-- КЛЮЧЕВОЙ РАЗДЕЛ: ТИР-ЛИСТЫ -->
+        <div id="main-tierlist" class="page-section active">
+            <section class="hero">
+                <h1>Крупнейший тир-лист игроков Minecraft</h1>
+                <p>Выбирайте дисциплину, изучайте актуальную статистику и оценивайте лучших PvP мастеров.</p>
+            </section>
 
-        <!-- Панель управления создателя -->
-        <section class="admin-panel" id="adminPanel" style="display: none;">
-            <h3>Панель Создателя: Добавить игрока</h3>
-            <form id="addPlayerForm">
-                <input type="text" id="pName" placeholder="Ник игрока" required>
-                <input type="number" id="pPoints" placeholder="Очки" required>
-                <select id="pMode">
-                    <option value="overall">Overall</option>
-                    <option value="sword">Sword</option>
-                    <option value="netuop">NethOP</option>
-                    <option value="pot">Pot</option>
-                </select>
-                <input type="text" id="pTier1" placeholder="Тир 1 (например, HT1)">
-                <input type="text" id="pTier2" placeholder="Тир 2 (например, LT1)">
-                <button type="submit" class="btn-submit">Добавить</button>
-            </form>
-            <button id="logoutBtn" class="btn-logout">Выйти из режима админа</button>
-        </section>
+            <!-- Панель управления создателя -->
+            <section class="admin-panel" id="adminPanel" style="display: none;">
+                <h3>Панель Создателя: Добавить игрока</h3>
+                <form id="addPlayerForm">
+                    <input type="text" id="pName" placeholder="Ник игрока" required>
+                    <input type="number" id="pPoints" placeholder="Очки" required>
+                    <select id="pMode">
+                        <option value="overall">Overall</option>
+                        <option value="sword">Sword</option>
+                        <option value="netuop">NethOP</option>
+                        <option value="pot">Pot</option>
+                        <option value="elytramace">ElytraMace</option>
+                        <option value="mace">Mace</option>
+                        <option value="cart">Cart</option>
+                    </select>
+                    <input type="text" id="pTier1" placeholder="Тир 1 (например, HT1)">
+                    <input type="text" id="pTier2" placeholder="Тир 2 (например, LT1)">
+                    <button type="submit" class="btn-submit">Добавить игрока</button>
+                </form>
+                <button id="logoutBtn" class="btn-logout">Выйти из режима админа</button>
+            </section>
 
-        <!-- Вкладки выбора режимов -->
-        <section class="tabs-container">
-            <button class="tab-btn active" data-tab="overall">Overall</button>
-            <button class="tab-btn" data-tab="sword">Sword</button>
-            <button class="tab-btn" data-tab="netuop">NethOP</button>
-            <button class="tab-btn" data-tab="pot">Pot</button>
-        </section>
+            <!-- Вкладки выбора режимов -->
+            <section class="tabs-container">
+                <button class="tab-btn active" data-tab="overall">Overall</button>
+                <button class="tab-btn" data-tab="sword">Sword</button>
+                <button class="tab-btn" data-tab="netuop">NethOP</button>
+                <button class="tab-btn" data-tab="pot">Pot</button>
+                <button class="tab-btn" data-tab="elytramace">ElytraMace</button>
+                <button class="tab-btn" data-tab="mace">Mace</button>
+                <button class="tab-btn" data-tab="cart">Cart</button>
+            </section>
 
-        <!-- Блок с таблицами -->
-        <section class="tab-content-wrapper">
-            <!-- Вкладка Overall -->
-            <div class="tab-content active" id="overall">
-                <h2>Общий рейтинг (Overall)</h2>
-                <div class="table-scroll">
-                    <table>
-                        <thead>
-                            <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
-                        </thead>
-                        <tbody id="tbody-overall"></tbody>
-                    </table>
+            <!-- Блок с таблицами -->
+            <section class="tab-content-wrapper">
+                <div class="tab-content active" id="overall">
+                    <h2>Общий рейтинг (Overall)</h2>
+                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-overall"></tbody></table></div>
                 </div>
-            </div>
-
-            <!-- Вкладка Sword -->
-            <div class="tab-content" id="sword">
-                <h2>Рейтинг: Sword (Меч)</h2>
-                <div class="table-scroll">
-                    <table>
-                        <thead>
-                            <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
-                        </thead>
-                        <tbody id="tbody-sword"></tbody>
-                    </table>
+                <div class="tab-content" id="sword">
+                    <h2>Рейтинг: Sword (Меч)</h2>
+                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-sword"></tbody></table></div>
                 </div>
-            </div>
-
-            <!-- Вкладка NethOP -->
-            <div class="tab-content" id="netuop">
-                <h2>Рейтинг: NethOP</h2>
-                <div class="table-scroll">
-                    <table>
-                        <thead>
-                            <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
-                        </thead>
-                        <tbody id="tbody-netuop"></tbody>
-                    </table>
+                <div class="tab-content" id="netuop">
+                    <h2>Рейтинг: NethOP</h2>
+                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-netuop"></tbody></table></div>
                 </div>
-            </div>
-
-            <!-- Вкладка Pot -->
-            <div class="tab-content" id="pot">
-                <h2>Рейтинг: Pot (Зелья)</h2>
-                <div class="table-scroll">
-                    <table>
-                        <thead>
-                            <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
-                        </thead>
-                        <tbody id="tbody-pot"></tbody>
-                    </table>
+                <div class="tab-content" id="pot">
+                    <h2>Рейтинг: Pot (Зелья)</h2>
+                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-pot"></tbody></table></div>
                 </div>
-            </div>
-        </section>
+                <div class="tab-content" id="elytramace">
+                    <h2>Рейтинг: ElytraMace (Булава + Элитры)</h2>
+                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-elytramace"></tbody></table></div>
+                </div>
+                <div class="tab-content" id="mace">
+                    <h2>Рейтинг: Mace (Булава)</h2>
+                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-mace"></tbody></table></div>
+                </div>
+                <div class="tab-content" id="cart">
+                    <h2>Рейтинг: Cart (Вагонетки / Кристаллы)</h2>
+                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-cart"></tbody></table></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- РАЗДЕЛ: ГАЙД -->
+        <div id="guide-page" class="page-section">
+            <section class="section-container">
+                <h2>Официальный PvP Гайд по системе Тиров</h2>
+                <div class="card-grid">
+                    <div class="info-card">
+                        <h3>Как определяются Тиры?</h3>
+                        <p>Игроки классифицируются от <strong>Tier 5 (Новички)</strong> до <strong>Tier 1 (Легенды PvP)</strong>. Префиксы означают положение внутри тира:</p>
+                        <ul>
+                            <li><span class="tier ht">HT</span> — High Tier (Верхняя граница уровня)</li>
+                            <li><span class="tier lt">LT</span> — Low Tier (Нижняя граница уровня)</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>Правила подачи заявок</h3>
+                        <p>Чтобы попасть в официальную таблицу, вы должны провести тестовый дуэльный сет против действующего тренера или тестировщика вашей дисциплины.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- РАЗДЕЛ: ТРЕНЕРЫ -->
+        <div id="coaches-page" class="page-section">
+            <section class="section-container">
+                <h2>Действующие Тренеры и Тестировщики</h2>
+                <p style="color: #8f94a6; margin-bottom: 30px;">Свяжитесь с ними в Discord для прохождения квалификационных тестов.</p>
+                <div class="card-grid">
+                    <div class="coach-card">
+                        <div class="avatar-placeholder">⚔️</div>
+                        <h3>strafikk</h3>
+                        <p class="role">Главный куратор</p>
+                        <span class="tag">Sword</span> <span class="tag">Mace</span>
+                    </div>
+                    <div class="coach-card">
+                        <div class="avatar-placeholder">🧪</div>
+                        <h3>vetakua</h3>
+                        <p class="role">Старший тренер</p>
+                        <span class="tag">Pot PvP</span> <span class="tag">Overall</span>
+                    </div>
+                    <div class="coach-card">
+                        <div class="avatar-placeholder">🚀</div>
+                        <h3>Слот свободен</h3>
+                        <p class="role">Идет набор</p>
+                        <span class="tag">ElytraMace</span>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
     <script src="script.js"></script>
