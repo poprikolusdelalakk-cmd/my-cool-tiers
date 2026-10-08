@@ -1,8 +1,6 @@
 // ==========================================
 // 1. ИНИЦИАЛИЗАЦИЯ И СЕТЬ SUPABASE
 // ==========================================
-// Для локального тестирования мы используем автоматическую имитацию полноценной БД.
-// Когда вы захотите переключиться на реальное облако — просто заполните эти два поля данными из Supabase.
 const SUPABASE_URL = ""; 
 const SUPABASE_ANON_KEY = "";
 
@@ -11,13 +9,19 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
 
-// Хранилище сессии и ролей пользователей (в имитационном режиме)
+// Хранилище сессии пользователей
 let currentUser = JSON.parse(localStorage.getItem('nn_user')) || null;
 
-// По умолчанию NazarMalinov — главный Овнер с бесконечными правами
-const OWNER_NICKNAME = "NazarMalinov";
+// ==========================================
+// 🛡️ ЖЕСТКАЯ НАСТРОЙКА ПРАВ И ДОСТУПА
+// ==========================================
+const OWNER_NICKNAME = "NazarMalinov"; // Твой ник. У него абсолютные права.
 
-// Дефолтный пак игроков
+// 👥 Список доверенных модераторов. Впиши сюда ники своих друзей, кому доверяешь управлять тир-листом.
+// Все, кого нет в этом списке и чей ник не NazarMalinov, будут ОБЫЧНЫМИ ИГРОКАМИ без доступа к админке.
+const trustedModerators = ["strafikk", "vetakua"]; 
+
+// Стартовый набор игроков
 const initialPlayers = [
     { id: 1, name: "strafikk", points: 290, mode: "overall", tier1: "HT1", tier2: "LT1" },
     { id: 2, name: "vetakua", points: 240, mode: "overall", tier1: "HT1", tier2: "LT2" },
@@ -29,13 +33,23 @@ const initialPlayers = [
 let players = JSON.parse(localStorage.getItem('nn_players')) || initialPlayers;
 let activeSearchQuery = "";
 
-// ==========================================
-// 2. СИСТЕМА АВТОРИЗАЦИИ И ПРАВ ДОСТУПА
-// ==========================================
+// Функция автоматического определения роли по никнейму
 function getUserRole(user) {
-    if (!user) return 'guest';
-    if (user.name.toLowerCase() === OWNER_NICKNAME.toLowerCase()) return 'owner';
-    return user.role || 'moderator'; // Любой зарегистрированный юзер становится модератором по умолчанию
+    if (!user) return 'guest'; // Гость (не вошел)
+    
+    const userNameLower = user.name.trim().toLowerCase();
+    
+    if (userNameLower === OWNER_NICKNAME.toLowerCase()) {
+        return 'owner'; // Ты — Создатель
+    }
+    
+    // Проверяем, есть ли ник в списке доверенных модераторов
+    const isTrusted = trustedModerators.some(mod => mod.toLowerCase() === userNameLower);
+    if (isTrusted) {
+        return 'moderator'; // Доверенный модератор
+    }
+    
+    return 'player'; // Все остальные — просто игроки
 }
 
 function updateAuthUI() {
@@ -51,12 +65,13 @@ function updateAuthUI() {
         `;
         document.getElementById('logoutBtn').addEventListener('click', logout);
         
-        // Показываем админку только Овнеру и Модераторам
+        // Панель управления открывается ТОЛЬКО для Овнера и Модераторов из белого списка
         if (role === 'owner' || role === 'moderator') {
             adminPanel.style.display = 'block';
             roleBadge.textContent = role === 'owner' ? 'Овнер / Создатель' : 'Модератор';
             roleBadge.style.background = role === 'owner' ? '#ff4757' : '#00f2fe';
         } else {
+            // Если зашел обычный игрок — панель полностью скрывается
             adminPanel.style.display = 'none';
         }
     } else {
@@ -65,13 +80,15 @@ function updateAuthUI() {
         adminPanel.style.display = 'none';
     }
     
-    // Скрываем или показываем колонку "Действие" в таблицах
+    // Колонка удаления в таблице видна только администрации
     document.querySelectorAll('.admin-only-cell').forEach(cell => {
         cell.style.display = (role === 'owner' || role === 'moderator') ? 'table-cell' : 'none';
     });
 }
 
-// Окна Авторизации
+// ==========================================
+// 3. ОКНА АВТОРИЗАЦИИ
+// ==========================================
 const modal = document.getElementById('authModal');
 function openModal() { modal.classList.add('active'); }
 function closeModal() { modal.classList.remove('active'); }
@@ -93,13 +110,13 @@ function switchTab(type) {
     }
 }
 
-// Логика работы Форм
+// Регистрация
 document.getElementById('registerForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const name = document.getElementById('regName').value.trim();
     const email = document.getElementById('regEmail').value.trim();
     
-    currentUser = { name: name, email: email, role: name.toLowerCase() === OWNER_NICKNAME.toLowerCase() ? 'owner' : 'moderator' };
+    currentUser = { name: name, email: email };
     localStorage.setItem('nn_user', JSON.stringify(currentUser));
     
     closeModal();
@@ -107,13 +124,13 @@ document.getElementById('registerForm').addEventListener('submit', (e) => {
     renderTables();
 });
 
+// Вход
 document.getElementById('loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value.trim();
-    // Имитация входа — берем имя из email
-    const name = email.split('@')[0];
+    const name = email.split('@')[0]; // Берем текст до собачки как временный ник
     
-    currentUser = { name: name, email: email, role: name.toLowerCase() === OWNER_NICKNAME.toLowerCase() ? 'owner' : 'moderator' };
+    currentUser = { name: name, email: email };
     localStorage.setItem('nn_user', JSON.stringify(currentUser));
     
     closeModal();
@@ -129,7 +146,7 @@ function logout() {
 }
 
 // ==========================================
-// 3. ОТРИСОВКА И ПОРЯДОК СОРТИРОВКИ ТАБЛИЦ
+// 4. ОТРИСОВКА И ПОРЯДОК СОРТИРОВКИ ТАБЛИЦ
 // ==========================================
 function getTierHtml(text) {
     if (!text) return '';
@@ -147,13 +164,11 @@ function renderTables() {
         if (!tbody) return;
         tbody.innerHTML = '';
 
-        // Фильтруем игроков по текущему PvP-режиму и строке глобального поиска
         let modePlayers = players.filter(p => p.mode === mode);
         if (activeSearchQuery) {
             modePlayers = modePlayers.filter(p => p.name.toLowerCase().includes(activeSearchQuery.toLowerCase()));
         }
 
-        // Сортировка по очкам рейтинга
         modePlayers.sort((a, b) => b.points - a.points);
 
         if (modePlayers.length === 0) {
@@ -169,6 +184,7 @@ function renderTables() {
             if (player.tier2) tiersHtml += getTierHtml(player.tier2);
             if (!tiersHtml) tiersHtml = '<span style="color:#424959">—</span>';
 
+            // Кнопка удаления рендерится только для админов
             let actionHtml = hasAdminAccess 
                 ? `<td><button class="btn-delete" onclick="deletePlayer(${player.id})">Удалить</button></td>` 
                 : '';
@@ -185,11 +201,14 @@ function renderTables() {
     });
 }
 
-// Добавление новых игроков
+// Добавление новых игроков (Защищено проверкой роли)
 document.getElementById('addPlayerForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const role = getUserRole(currentUser);
-    if (role !== 'owner' && role !== 'moderator') return;
+    if (role !== 'owner' && role !== 'moderator') {
+        alert("Ошибка доступа! Вы не являетесь администратором.");
+        return;
+    }
 
     const newPlayer = {
         id: Date.now(),
@@ -206,7 +225,7 @@ document.getElementById('addPlayerForm').addEventListener('submit', (e) => {
     renderTables();
 });
 
-// Удаление игроков
+// Удаление игроков (Защищено проверкой роли)
 window.deletePlayer = function(id) {
     const role = getUserRole(currentUser);
     if (role !== 'owner' && role !== 'moderator') return;
@@ -219,35 +238,30 @@ window.deletePlayer = function(id) {
 };
 
 // ==========================================
-// 4. НАВИГАЦИЯ И ЖИВОЙ ПОИСК
+// 5. НАВИГАЦИЯ И ЖИВОЙ ПОИСК
 // ==========================================
-// Поиск по никам
 document.getElementById('playerSearch').addEventListener('input', (e) => {
     activeSearchQuery = e.target.value;
     renderTables();
 });
 
-// Переключение разделов шапки
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
         
         link.classList.add('active');
-        document.getElementById(link.getAttribute('data-target')).classList.add('active');
-    });
+document.getElementById(link.getAttribute('data-target')).classList.add('active');
 });
-
-// Переключение табов PvP режимов
+});
 document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        
+btn.addEventListener('click', () => {
+document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 btn.classList.add('active');
 document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
 });
 });
-// Первоначальный пуск
+// Запуск приложения
 updateAuthUI();
 renderTables();
