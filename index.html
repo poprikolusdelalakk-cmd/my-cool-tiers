@@ -13,7 +13,7 @@
         <nav>
             <a href="#">Гайд</a>
             <a href="#">Тренеры</a>
-            <button class="btn-login">Войти</button>
+            <button class="btn-admin" id="adminAuthBtn">Вход для Создателя</button>
         </nav>
     </header>
 
@@ -21,6 +21,25 @@
         <section class="hero">
             <h1>Крупнейший тир-лист игроков Minecraft</h1>
             <p>Выбирайте режим, смотрите статистику и оценивайте лучших игроков.</p>
+        </section>
+
+        <!-- Панель управления (видна только админу после ввода пароля) -->
+        <section class="admin-panel" id="adminPanel" style="display: none;">
+            <h3>Панель Создателя: Добавить игрока</h3>
+            <form id="addPlayerForm">
+                <input type="text" id="pName" placeholder="Ник игрока" required>
+                <input type="number" id="pPoints" placeholder="Очки" required>
+                <select id="pMode">
+                    <option value="overall">Overall</option>
+                    <option value="sword">Sword</option>
+                    <option value="netuop">NethOP</option>
+                    <option value="pot">Pot</option>
+                </select>
+                <input type="text" id="pTier1" placeholder="Тир 1 (например, HT1)">
+                <input type="text" id="pTier2" placeholder="Тир 2 (например, LT1)">
+                <button type="submit" class="btn-submit">Добавить</button>
+            </form>
+            <button id="logoutBtn" class="btn-logout">Выйти из режима админа</button>
         </section>
 
         <!-- Вкладки (Категории) -->
@@ -38,27 +57,9 @@
                 <h2>Общий рейтинг (Overall)</h2>
                 <table>
                     <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Игрок</th>
-                            <th>Очки</th>
-                            <th>Тиры</th>
-                        </tr>
+                        <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td class="player-name">strafikk</td>
-                            <td>222</td>
-                            <td><span class="tier ht">HT1</span> <span class="tier lt">LT1</span></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td class="player-name">vetakua</td>
-                            <td>177</td>
-                            <td><span class="tier ht">HT1</span> <span class="tier lt">LT2</span></td>
-                        </tr>
-                    </tbody>
+                    <tbody id="tbody-overall"></tbody>
                 </table>
             </div>
 
@@ -67,32 +68,32 @@
                 <h2>Рейтинг: Sword (Меч)</h2>
                 <table>
                     <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Игрок</th>
-                            <th>Очки</th>
-                        </tr>
+                        <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td class="player-name">Player_One</td>
-                            <td>300</td>
-                        </tr>
-                    </tbody>
+                    <tbody id="tbody-sword"></tbody>
                 </table>
             </div>
 
             <!-- Вкладка NethOP -->
             <div class="tab-content" id="netuop">
                 <h2>Рейтинг: NethOP</h2>
-                <p>Здесь пока нет данных...</p>
+                <table>
+                    <thead>
+                        <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
+                    </thead>
+                    <tbody id="tbody-netuop"></tbody>
+                </table>
             </div>
 
             <!-- Вкладка Pot -->
             <div class="tab-content" id="pot">
                 <h2>Рейтинг: Pot (Зелья)</h2>
-                <p>Здесь пока нет данных...</p>
+                <table>
+                    <thead>
+                        <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
+                    </thead>
+                    <tbody id="tbody-pot"></tbody>
+                </table>
             </div>
         </section>
     </main>
