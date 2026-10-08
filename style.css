@@ -1,61 +1,264 @@
-/* Стили для панели администратора */
-.admin-panel {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #1c1f2b;
-    border: 2px dashed #45f3ff;
-    border-radius: 8px;
+/* Общие стили и сброс отступов */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-.admin-panel h3 {
-    margin-top: 0;
+
+body {
+    background-color: #0b0c10;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-bottom: 50px;
+}
+
+/* Шапка сайта */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #12141c;
+    border-bottom: 1px solid #1f2330;
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 22px;
+    color: #45f3ff;
+    letter-spacing: 1px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+nav a {
+    color: #aaaaaa;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+nav a:hover {
     color: #45f3ff;
 }
+
+.btn-admin {
+    background-color: transparent;
+    color: #45f3ff;
+    border: 1px solid #45f3ff;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.btn-admin:hover {
+    background-color: #45f3ff;
+    color: #0b0c10;
+}
+
+/* Главный блок текста */
+.hero {
+    text-align: center;
+    padding: 60px 20px 40px 20px;
+}
+
+.hero h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    color: #8f94a6;
+    font-size: 15px;
+}
+
+/* Контейнер вкладок */
+.tabs-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.tab-btn {
+    background-color: #12141c;
+    border: 1px solid #1f2330;
+    color: #8f94a6;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    color: #ffffff;
+    border-color: #3b4257;
+}
+
+.tab-btn.active {
+    color: #45f3ff;
+    background-color: #161924;
+    border-color: #45f3ff;
+}
+
+/* Отображение контента вкладок */
+.tab-content {
+    display: none; /* Скрывает все вкладки по умолчанию */
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 25px;
+    background-color: #12141c;
+    border-radius: 10px;
+    border: 1px solid #1f2330;
+}
+
+.tab-content.active {
+    display: block; /* Показывает только активную */
+}
+
+.tab-content h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+/* Таблицы */
+.table-scroll {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    color: #8f94a6;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    border-bottom: 2px solid #1f2330;
+}
+
+td {
+    padding: 14px 16px;
+    font-size: 15px;
+    border-bottom: 1px solid #1f2330;
+    color: #e1e3e8;
+}
+
+tr:hover td {
+    background-color: #161924;
+}
+
+.player-name {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* Стиль плашек тиров */
+.tier {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 6px;
+    letter-spacing: 0.5px;
+}
+
+.tier.ht { background-color: #ff4757; color: #ffffff; }
+.tier.lt { background-color: #ffa502; color: #0b0c10; }
+
+/* Панель администратора */
+.admin-panel {
+    max-width: 900px;
+    margin: 0 auto 30px auto;
+    padding: 25px;
+    background-color: #161924;
+    border: 2px dashed #45f3ff;
+    border-radius: 10px;
+}
+
+.admin-panel h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #45f3ff;
+}
+
 #addPlayerForm {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
 }
+
 #addPlayerForm input, #addPlayerForm select {
     background-color: #0b0c10;
-    border: 1px solid #333;
-    color: white;
-    padding: 8px;
-    border-radius: 4px;
+    border: 1px solid #2d3245;
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
     flex: 1;
-    min-width: 120px;
+    min-width: 140px;
 }
+
+#addPlayerForm input:focus, #addPlayerForm select:focus {
+    outline: none;
+    border-color: #45f3ff;
+}
+
 .btn-submit {
     background-color: #45f3ff;
     color: #0b0c10;
     border: none;
-    font-weight: bold;
-    padding: 8px 15px;
-    border-radius: 4px;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
 }
-.btn-admin {
-    background-color: #222;
-    color: #45f3ff;
-    border: 1px solid #45f3ff;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
+
+.btn-submit:hover {
+    background-color: #37cfdb;
 }
+
 .btn-logout {
     background: none;
     border: none;
     color: #ff4757;
-    margin-top: 10px;
+    margin-top: 15px;
     cursor: pointer;
     text-decoration: underline;
+    font-size: 13px;
 }
+
 .btn-delete {
-    background-color: #ff4757;
-    color: white;
-    border: none;
-    padding: 3px 8px;
+    background-color: rgba(255, 71, 87, 0.1);
+    color: #ff4757;
+    border: 1px solid #ff4757;
+    padding: 4px 10px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-delete:hover {
+    background-color: #ff4757;
+    color: #ffffff;
 }
