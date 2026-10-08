@@ -3,35 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CraftTiers — Киберспортивный Minecraft Тир-Лист</title>
+    <title>CraftTiers — Киберспортивный Minecraft Проект</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Подключаем официальный клиент Supabase для работы базы данных -->
+    <script src="https://jsdelivr.net"></script>
 </head>
 <body>
 
     <header>
         <div class="logo">CRAFT<span>TIERS</span></div>
         <nav>
-            <button class="nav-link active" data-target="main-tierlist">Тир-листы</button>
+            <button class="nav-link active" data-target="main-tierlist">Рейтинги</button>
             <button class="nav-link" data-target="guide-page">Гайд</button>
             <button class="nav-link" data-target="coaches-page">Тренеры</button>
-            <button class="btn-admin" id="adminAuthBtn">Вход для Создателя</button>
+            <div class="auth-block" id="authBlock">
+                <button class="btn-primary" id="openAuthModalBtn">Войти / Регистрация</button>
+            </div>
         </nav>
     </header>
 
     <main>
-        <!-- КЛЮЧЕВОЙ РАЗДЕЛ: ТИР-ЛИСТЫ -->
+        <!-- СЕКЦИЯ: ТИР-ЛИСТЫ -->
         <div id="main-tierlist" class="page-section active">
             <section class="hero">
-                <h1>Крупнейший тир-лист игроков Minecraft</h1>
-                <p>Выбирайте дисциплину, изучайте актуальную статистику и оценивайте лучших PvP мастеров.</p>
+                <div class="hero-badge">PROJECT NAZARMALINOV</div>
+                <h1>Элитный PvP Тир-Лист</h1>
+                <p>Единая база сильнейших СНГ игроков. Дисциплины, статистика и подтвержденные квалификации.</p>
             </section>
 
-            <!-- Панель управления создателя -->
+            <!-- Панель управления (Доступна ТОЛЬКО Овнеру и Модераторам) -->
             <section class="admin-panel" id="adminPanel" style="display: none;">
-                <h3>Панель Создателя: Добавить игрока</h3>
+                <div class="panel-header">
+                    <h3>Панель управления <span id="userRoleBadge">Модератор</span></h3>
+                </div>
                 <form id="addPlayerForm">
-                    <input type="text" id="pName" placeholder="Ник игрока" required>
-                    <input type="number" id="pPoints" placeholder="Очки" required>
+                    <input type="text" id="pName" placeholder="Никнейм игрока" required>
+                    <input type="number" id="pPoints" placeholder="Очки (Рейтинг)" required>
                     <select id="pMode">
                         <option value="overall">Overall</option>
                         <option value="sword">Sword</option>
@@ -42,11 +49,15 @@
                         <option value="cart">Cart</option>
                     </select>
                     <input type="text" id="pTier1" placeholder="Тир 1 (например, HT1)">
-                    <input type="text" id="pTier2" placeholder="Тир 2 (например, LT1)">
-                    <button type="submit" class="btn-submit">Добавить игрока</button>
+                    <input type="text" id="pTier2" placeholder="Тир 2 (например, LT3)">
+                    <button type="submit" class="btn-action">Внести в базу</button>
                 </form>
-                <button id="logoutBtn" class="btn-logout">Выйти из режима админа</button>
             </section>
+
+            <!-- Поиск игроков -->
+            <div class="search-container">
+                <input type="text" id="playerSearch" placeholder="Быстрый поиск игрока по нику...">
+            </div>
 
             <!-- Вкладки выбора режимов -->
             <section class="tabs-container">
@@ -59,88 +70,99 @@
                 <button class="tab-btn" data-tab="cart">Cart</button>
             </section>
 
-            <!-- Блок с таблицами -->
+            <!-- Таблицы контента -->
             <section class="tab-content-wrapper">
+                <!-- Вкладки генерируются скриптом. Пример структуры для всех вкладок: -->
                 <div class="tab-content active" id="overall">
-                    <h2>Общий рейтинг (Overall)</h2>
-                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-overall"></tbody></table></div>
+                    <div class="table-scroll"><table><thead><tr><th>Место</th><th>Игрок</th><th>Рейтинг</th><th>Тиры</th><th class="admin-only-cell" style="display:none;">Действие</th></tr></thead><tbody id="tbody-overall"></tbody></table></div>
                 </div>
-                <div class="tab-content" id="sword">
-                    <h2>Рейтинг: Sword (Меч)</h2>
-                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-sword"></tbody></table></div>
-                </div>
-                <div class="tab-content" id="netuop">
-                    <h2>Рейтинг: NethOP</h2>
-                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-netuop"></tbody></table></div>
-                </div>
-                <div class="tab-content" id="pot">
-                    <h2>Рейтинг: Pot (Зелья)</h2>
-                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-pot"></tbody></table></div>
-                </div>
-                <div class="tab-content" id="elytramace">
-                    <h2>Рейтинг: ElytraMace (Булава + Элитры)</h2>
-                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-elytramace"></tbody></table></div>
-                </div>
-                <div class="tab-content" id="mace">
-                    <h2>Рейтинг: Mace (Булава)</h2>
-                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-mace"></tbody></table></div>
-                </div>
-                <div class="tab-content" id="cart">
-                    <h2>Рейтинг: Cart (Вагонетки / Кристаллы)</h2>
-                    <div class="table-scroll"><table><thead><tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr></thead><tbody id="tbody-cart"></tbody></table></div>
-                </div>
+                <div class="tab-content" id="sword"><div class="table-scroll"><table><thead><tr><th>Место</th><th>Игрок</th><th>Рейтинг</th><th>Тиры</th><th class="admin-only-cell" style="display:none;">Действие</th></tr></thead><tbody id="tbody-sword"></tbody></table></div></div>
+                <div class="tab-content" id="netuop"><div class="table-scroll"><table><thead><tr><th>Место</th><th>Игрок</th><th>Рейтинг</th><th>Тиры</th><th class="admin-only-cell" style="display:none;">Действие</th></tr></thead><tbody id="tbody-netuop"></tbody></table></div></div>
+                <div class="tab-content" id="pot"><div class="table-scroll"><table><thead><tr><th>Место</th><th>Игрок</th><th>Рейтинг</th><th>Тиры</th><th class="admin-only-cell" style="display:none;">Действие</th></tr></thead><tbody id="tbody-pot"></tbody></table></div></div>
+                <div class="tab-content" id="elytramace"><div class="table-scroll"><table><thead><tr><th>Место</th><th>Игрок</th><th>Рейтинг</th><th>Тиры</th><th class="admin-only-cell" style="display:none;">Действие</th></tr></thead><tbody id="tbody-elytramace"></tbody></table></div></div>
+                <div class="tab-content" id="mace"><div class="table-scroll"><table><thead><tr><th>Место</th><th>Игрок</th><th>Рейтинг</th><th>Тиры</th><th class="admin-only-cell" style="display:none;">Действие</th></tr></thead><tbody id="tbody-mace"></tbody></table></div></div>
+                <div class="tab-content" id="cart"><div class="table-scroll"><table><thead><tr><th>Место</th><th>Игрок</th><th>Рейтинг</th><th>Тиры</th><th class="admin-only-cell" style="display:none;">Действие</th></tr></thead><tbody id="tbody-cart"></tbody></table></div></div>
             </section>
         </div>
 
-        <!-- РАЗДЕЛ: ГАЙД -->
+        <!-- СЕКЦИЯ: ГАЙД -->
         <div id="guide-page" class="page-section">
             <section class="section-container">
-                <h2>Официальный PvP Гайд по системе Тиров</h2>
+                <h2 class="section-title">Система оценки и рангов</h2>
                 <div class="card-grid">
                     <div class="info-card">
-                        <h3>Как определяются Тиры?</h3>
-                        <p>Игроки классифицируются от <strong>Tier 5 (Новички)</strong> до <strong>Tier 1 (Легенды PvP)</strong>. Префиксы означают положение внутри тира:</p>
-                        <ul>
-                            <li><span class="tier ht">HT</span> — High Tier (Верхняя граница уровня)</li>
-                            <li><span class="tier lt">LT</span> — Low Tier (Нижняя граница уровня)</li>
-                        </ul>
+                        <div class="card-icon">⚡</div>
+                        <h3>Градация сил</h3>
+                        <p>Каждая дисциплина разделена на 5 основных разрядов. Позиция внутри разряда обозначается маркерами:</p>
+                        <div class="example-box">
+                            <span class="tier tier-red">HT1</span> — Высший пиковый уровень<br><br>
+                            <span class="tier tier-orange">LT3</span> — Базовый проходной уровень
+                        </div>
                     </div>
                     <div class="info-card">
-                        <h3>Правила подачи заявок</h3>
-                        <p>Чтобы попасть в официальную таблицу, вы должны провести тестовый дуэльный сет против действующего тренера или тестировщика вашей дисциплины.</p>
+                        <div class="card-icon">💎</div>
+                        <h3>Как верифицировать ник?</h3>
+                        <p>Зарегистрируйтесь на сайте, свяжитесь с аккредитованными тренерами проекта и оставьте заявку на тестовые поединки.</p>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- РАЗДЕЛ: ТРЕНЕРЫ -->
+        <!-- СЕКЦИЯ: ТРЕНЕРЫ -->
         <div id="coaches-page" class="page-section">
             <section class="section-container">
-                <h2>Действующие Тренеры и Тестировщики</h2>
-                <p style="color: #8f94a6; margin-bottom: 30px;">Свяжитесь с ними в Discord для прохождения квалификационных тестов.</p>
+                <h2 class="section-title">Экспертный совет проекта</h2>
                 <div class="card-grid">
                     <div class="coach-card">
-                        <div class="avatar-placeholder">⚔️</div>
+                        <div class="avatar">SM</div>
                         <h3>strafikk</h3>
-                        <p class="role">Главный куратор</p>
-                        <span class="tag">Sword</span> <span class="tag">Mace</span>
+                        <p class="role">Owner & Founder</p>
+                        <div class="tags"><span class="tag">Sword</span><span class="tag">Mace</span></div>
                     </div>
                     <div class="coach-card">
-                        <div class="avatar-placeholder">🧪</div>
+                        <div class="avatar">VM</div>
                         <h3>vetakua</h3>
-                        <p class="role">Старший тренер</p>
-                        <span class="tag">Pot PvP</span> <span class="tag">Overall</span>
-                    </div>
-                    <div class="coach-card">
-                        <div class="avatar-placeholder">🚀</div>
-                        <h3>Слот свободен</h3>
-                        <p class="role">Идет набор</p>
-                        <span class="tag">ElytraMace</span>
+                        <p class="role">Head Tester</p>
+                        <div class="tags"><span class="tag">Pot PvP</span><span class="tag">Overall</span></div>
                     </div>
                 </div>
             </section>
         </div>
     </main>
+
+    <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ / РЕГИСТРАЦИИ -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeAuthModalBtn">&times;</button>
+            <div class="modal-tabs">
+                <button class="modal-tab-btn active" id="tabLoginBtn">Вход</button>
+                <button class="modal-tab-btn" id="tabRegisterBtn">Регистрация</button>
+            </div>
+            
+            <!-- Форма входа -->
+            <form id="loginForm" class="auth-form active">
+                <input type="email" id="loginEmail" placeholder="Ваш Email" required>
+                <input type="password" id="loginPassword" placeholder="Пароль" required>
+                <button type="submit" class="btn-action btn-full">Войти в профиль</button>
+            </form>
+
+            <!-- Форма регистрации -->
+            <form id="registerForm" class="auth-form">
+                <input type="text" id="regName" placeholder="Игровой ник (Minecraft)" required>
+                <input type="email" id="regEmail" placeholder="Email адрес" required>
+                <input type="password" id="regPassword" placeholder="Придумайте надежный пароль" required>
+                <button type="submit" class="btn-action btn-full">Создать аккаунт</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- УНИКАЛЬНЫЙ БРЕНДОВЫЙ ФУТЕР -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 CraftTiers. Все права защищены.</p>
+            <p class="branding">Designed & Developed by <span class="neon-text">project NazarMalinov</span></p>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
