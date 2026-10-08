@@ -502,3 +502,79 @@ footer {
     font-weight: 800;
 text-shadow: 0 0 8px var(--primary-glow);
 }
+
+/* Новая киберспортивная структура ячеек игроков */
+.player-profile-cell {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Стилизация аватарок голов Minecraft */
+.player-skin-head {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    background-color: #161a26;
+    border: 2px solid #202638;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    image-rendering: pixelated; /* Сохраняет пиксельный стиль майнкрафта */
+    transition: transform 0.2s ease;
+}
+
+tr:hover .player-skin-head {
+    transform: scale(1.1) rotate(3deg);
+    border-color: var(--primary);
+}
+
+.player-info-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.player-points-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Медали и номера мест */
+.place-number {
+    font-weight: 800;
+    color: var(--text-muted);
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.place-medal {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 6px;
+    font-weight: 900;
+    font-size: 14px;
+}
+
+.medal-gold {
+    background: linear-gradient(135deg, #ffe066, #f5b041);
+    color: #000;
+    box-shadow: 0 0 10px rgba(245, 176, 65, 0.4);
+}
+
+.medal-silver {
+    background: linear-gradient(135deg, #e5e8e8, #bdc3c7);
+    color: #000;
+}
+
+.medal-bronze {
+    background: linear-gradient(135deg, #dc7633, #ba4a00);
+    color: #fff;
+}
+
+/* Выравнивание колонок */
+.td-place { width: 70px; text-align: center; }
+.td-player { min-width: 220px; }
+.td-rating-val { font-size: 16px; width: 120px; }
+.td-tiers { vertical-align: middle; }
