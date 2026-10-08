@@ -23,7 +23,7 @@
             <p>Выбирайте режим, смотрите статистику и оценивайте лучших игроков.</p>
         </section>
 
-        <!-- Панель управления (видна только админу после ввода пароля) -->
+        <!-- Панель управления создателя -->
         <section class="admin-panel" id="adminPanel" style="display: none;">
             <h3>Панель Создателя: Добавить игрока</h3>
             <form id="addPlayerForm">
@@ -42,7 +42,7 @@
             <button id="logoutBtn" class="btn-logout">Выйти из режима админа</button>
         </section>
 
-        <!-- Вкладки (Категории) -->
+        <!-- Вкладки выбора режимов -->
         <section class="tabs-container">
             <button class="tab-btn active" data-tab="overall">Overall</button>
             <button class="tab-btn" data-tab="sword">Sword</button>
@@ -50,50 +50,58 @@
             <button class="tab-btn" data-tab="pot">Pot</button>
         </section>
 
-        <!-- Контент вкладок (Таблицы) -->
+        <!-- Блок с таблицами -->
         <section class="tab-content-wrapper">
             <!-- Вкладка Overall -->
             <div class="tab-content active" id="overall">
                 <h2>Общий рейтинг (Overall)</h2>
-                <table>
-                    <thead>
-                        <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
-                    </thead>
-                    <tbody id="tbody-overall"></tbody>
-                </table>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
+                        </thead>
+                        <tbody id="tbody-overall"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Вкладка Sword -->
             <div class="tab-content" id="sword">
                 <h2>Рейтинг: Sword (Меч)</h2>
-                <table>
-                    <thead>
-                        <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
-                    </thead>
-                    <tbody id="tbody-sword"></tbody>
-                </table>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
+                        </thead>
+                        <tbody id="tbody-sword"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Вкладка NethOP -->
             <div class="tab-content" id="netuop">
                 <h2>Рейтинг: NethOP</h2>
-                <table>
-                    <thead>
-                        <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
-                    </thead>
-                    <tbody id="tbody-netuop"></tbody>
-                </table>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
+                        </thead>
+                        <tbody id="tbody-netuop"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Вкладка Pot -->
             <div class="tab-content" id="pot">
                 <h2>Рейтинг: Pot (Зелья)</h2>
-                <table>
-                    <thead>
-                        <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
-                    </thead>
-                    <tbody id="tbody-pot"></tbody>
-                </table>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr><th>#</th><th>Игрок</th><th>Очки</th><th>Тиры</th><th>Действие</th></tr>
+                        </thead>
+                        <tbody id="tbody-pot"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
